@@ -6,20 +6,22 @@ const Search = ({ onSearchResults }) => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    
     if (query.length > 0) {
       setIsLoading(true);
       setError(null);
 
       const fetchData = async () => {
         try {
-          const response = await fetch(`http://localhost:3333/transactions/search`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ query: query }),
-          });
+          const response = await fetch(
+            `http://localhost:3333/transactions/search`,
+            {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({ query: query }),
+            }
+          );
 
           if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
@@ -27,28 +29,24 @@ const Search = ({ onSearchResults }) => {
 
           const data = await response.json();
           onSearchResults(data);
-            console.log(data);
+          console.log(data);
         } catch (err) {
           setError(err.message);
         } finally {
-          
           setIsLoading(false);
         }
       };
 
-     
       fetchData();
     } else {
-      
       onSearchResults([]);
     }
-
-  }, [query, onSearchResults]); 
+  }, [query, onSearchResults]);
 
   const handleInputChange = (event) => {
     setQuery(event.target.value);
   };
-  
+
   return (
     <div className="flex flex-col items-center p-4">
       <input
@@ -59,15 +57,9 @@ const Search = ({ onSearchResults }) => {
         onChange={handleInputChange}
       />
       {isLoading && (
-        <div className="mt-2 text-gray-500">
-          Loading...
-        </div>
+        <div className="mt-2 text-gray-500 text-sm">Loading...</div>
       )}
-      {error && (
-        <div className="mt-2 text-red-500">
-          Error: {error}
-        </div>
-      )}
+      {error && <div className="mt-2 text-red-500">Error: {error}</div>}
     </div>
   );
 };

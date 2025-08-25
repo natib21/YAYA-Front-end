@@ -1,14 +1,12 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-  content: [
-    "./src/**/*.{html,js,jsx,ts,tsx}",
-  ],
+  content: ['./src/**/*.{html,js,jsx,ts,tsx}'],
   theme: {
     extend: {
       fontFamily: {
-         'gills': ['Gills', 'sans-serif'],
+        gills: ['Gills', 'sans-serif'],
+      },
     },
+    plugins: [],
   },
-  plugins: [],
-}
-}
+};

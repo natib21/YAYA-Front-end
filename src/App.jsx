@@ -17,12 +17,12 @@ const App = ()=>{
    }
  console.log(searchResults.data)
   return <div className="text-3xl font-bold bg-[#f8f8f8] ">
-          <Header handleSearchResults={handleSearchResults} 
+             <Header handleSearchResults={handleSearchResults} 
                   handleDetailClick={handleDetailClick}
                   searchResults={searchResults}
                    />
          <main className="container mx-auto p-4">
-         <Transaction searchDetails={searchDetails} 
+            <Transaction searchDetails={searchDetails} 
                       handleDeleteRMV={handleDeleteRMV} 
                        />
       </main> 

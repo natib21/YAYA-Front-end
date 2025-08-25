@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
 const TransactionTable = () => {
-  const currentUserId = 'User Account'; 
+  const currentUserId = 'User Account';
   const [data, setData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -9,7 +9,10 @@ const TransactionTable = () => {
   const [error, setError] = useState(null);
   const getTransactionType = (transaction) => {
     // Top-up transaction: sender and recipient are the same user.
-    if (transaction.Sender === transaction.Receiver && transaction.Sender === currentUserId) {
+    if (
+      transaction.Sender === transaction.Receiver &&
+      transaction.Sender === currentUserId
+    ) {
       return {
         type: 'Top-Up',
         label: 'Top-Up',
@@ -43,36 +46,36 @@ const TransactionTable = () => {
       icon: '',
     };
   };
-  
+
   useEffect(() => {
     const fetchTableData = async () => {
       setIsLoading(true);
       setError(null);
       try {
-        const response = await fetch(`http://localhost:3333/transactions/find_by_user?p=${currentPage}`);
+        const response = await fetch(
+          `http://localhost:3333/transactions/find_by_user?p=${currentPage}`
+        );
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
-        
+
         const result = await response.json();
-        
+
         setData(result);
         console.log(result);
         // setTotalPages(result.meta.totalPages);
         setTotalPages(result.totalPages); // Placeholder until backend provides totalPages
-        
       } catch (err) {
-        setError("Failed to fetch data. Please check your backend server.");
-        console.error("Fetch error:", err);
+        setError('Failed to fetch data. Please check your backend server.');
+        console.error('Fetch error:', err);
       } finally {
         setIsLoading(false);
       }
     };
 
     fetchTableData();
-  }, [currentPage]); 
+  }, [currentPage]);
 
-  
   const handlePageChange = (newPage) => {
     if (newPage >= 1 && newPage <= totalPages) {
       setCurrentPage(newPage);
@@ -99,7 +102,7 @@ const TransactionTable = () => {
         </tr>
       );
     }
-    console.log(data.transactions)
+    console.log(data.transactions);
     if (data.transactions.length === 0) {
       return (
         <tr>
@@ -110,39 +113,42 @@ const TransactionTable = () => {
       );
     }
     return data.transactions.map((item) => {
-     const type = getTransactionType(item);
-       return ( 
-      <tr key={item.ID}>
-      
-        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-          {item.ID}
-        </td>
-        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-          {item.Sender}
-        </td>
-        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-          {item.Receiver}
-        </td>
-        <td className="px-6 py-4 whitespace-nowrap text-sm  font-semibold">
-          {item.Cause}
-        </td>
-        <td className="px-6 py-4 whitespace-nowrap text-sm text-blue-600 font-semibold">
-          {item.Amount}
-        </td>
-         <td className="px-6 py-4 whitespace-nowrap text-sm  font-semibold">
-          {item.Currency}
-        </td>
-        
-        <td className="px-6 py-4 whitespace-nowrap">
-            <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${type.style}`}>
-              <span className="mr-1" dangerouslySetInnerHTML={{ __html: type.icon }}></span>
+      const type = getTransactionType(item);
+      return (
+        <tr key={item.ID}>
+          <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+            {item.ID}
+          </td>
+          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+            {item.Sender}
+          </td>
+          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+            {item.Receiver}
+          </td>
+          <td className="px-6 py-4 whitespace-nowrap text-sm  font-semibold">
+            {item.Cause}
+          </td>
+          <td className="px-6 py-4 whitespace-nowrap text-sm text-blue-600 font-semibold">
+            {item.Amount}
+          </td>
+          <td className="px-6 py-4 whitespace-nowrap text-sm  font-semibold">
+            {item.Currency}
+          </td>
+
+          <td className="px-6 py-4 whitespace-nowrap">
+            <span
+              className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${type.style}`}
+            >
+              <span
+                className="mr-1"
+                dangerouslySetInnerHTML={{ __html: type.icon }}
+              ></span>
               {type.label}
             </span>
           </td>
-        
-      </tr>
-       )
-  });
+        </tr>
+      );
+    });
   };
 
   return (
@@ -151,25 +157,46 @@ const TransactionTable = () => {
         <table className="min-w-full divide-y divide-gray-200 bg-white">
           <thead className="bg-gray-50">
             <tr>
-              <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th
+                scope="col"
+                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+              >
                 Transaction ID
               </th>
-              <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th
+                scope="col"
+                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+              >
                 Sender
               </th>
-              <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th
+                scope="col"
+                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+              >
                 Receiver
               </th>
-              <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th
+                scope="col"
+                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+              >
                 Cause
               </th>
-              <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th
+                scope="col"
+                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+              >
                 Amount
               </th>
-              <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th
+                scope="col"
+                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+              >
                 Currency
               </th>
-               <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th
+                scope="col"
+                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+              >
                 Type
               </th>
             </tr>
@@ -180,7 +207,6 @@ const TransactionTable = () => {
         </table>
       </div>
 
-      
       <div className="flex items-center gap-4 mt-6 text-sm font-Roboto">
         <button
           onClick={() => handlePageChange(currentPage - 1)}

@@ -6,7 +6,6 @@ const TransactionSearch = ({ transaction, handleDeleteRMV }) => {
                 className="relative bg-white rounded-lg shadow-md p-6 border-l-4 border-blue-500 "
               >
               <div>
-
                 <div className="font-bold text-lg text-gray-800">
                   Transaction ID: <span className="font-normal">{transaction.ID}</span>
                 </div>
@@ -35,15 +34,11 @@ const TransactionSearch = ({ transaction, handleDeleteRMV }) => {
                   Status: <span className="font-medium">{transaction.Status}</span>
                 </div>
                </div>
-               <div
-  className="absolute top-3 right-3 flex items-center justify-center w-8 h-8 rounded-full 
-             text-gray-500 hover:text-white hover:bg-red-500 cursor-pointer transition-all duration-200"
-  onClick={handleDeleteRMV}
->
-  <span className="text-lg font-bold">×</span>
-</div>
-
-
+               <div className="absolute top-3 right-3 flex items-center justify-center w-8 h-8 rounded-full 
+                      text-gray-500 hover:text-white hover:bg-red-500 cursor-pointer transition-all duration-200"
+                       onClick={handleDeleteRMV}>
+                 <span className="text-lg font-bold">×</span>
+               </div>
               </div>
             ))}
           </div>
