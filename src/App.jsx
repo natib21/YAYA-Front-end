@@ -1,10 +1,16 @@
 import Search from "./features/Search"
 import { useState ,useCallback} from "react";
+import TransactionSearch from "./pages/TransactionSearch";
 const App = ()=>{
   const [searchResults, setSearchResults] = useState([]);
-
+  const [searchDetails, setSearchDetails] = useState([]); 
   const handleSearchResults = useCallback((data) => {
     setSearchResults(data);
+  }, []);
+
+   const handleDetailClick = useCallback((transaction) => {
+    setSearchDetails([transaction]);
+    setSearchResults([]); // Hide the dropdown after a result is clicked
   }, []);
  console.log(searchResults.data)
   return <div className="text-3xl font-bold bg-[#f8f8f8] ">
@@ -13,13 +19,13 @@ const App = ()=>{
             <a href="/" className="text-2xl font-semibold text-blue-600">
               <img src="https://yayawallet.com/images/logo.svg" alt="YayaWallet Logo" className="h-12 inline-block mr-2" />
             </a>
-            <div>
+            <div className="relative w-full">
               <Search onSearchResults={handleSearchResults}/>
-              <div>
+              <div className="absolute top-full left-0 w-full mt-1 bg-white  border-gray-300 rounded-md shadow-lg z-10 p-2 max-h-60 overflow-y-auto">
                 {searchResults?.data?.length > 0 && (
-                 <div>
+                 <div >
                   {searchResults?.data?.map((result, index) => (
-                    <div key={index} className="text-left text-sm text-gray-600 mt-2">
+                    <div onClick={() => handleDetailClick(result)} key={index} className="text-left text-sm text-gray-600 mt-2 cursor-pointer hover:bg-gray-100 p-2 rounded">
                       {result.ID} - {result.Sender} to {result.Receiver}
                     </div>
                 ))}
@@ -34,41 +40,19 @@ const App = ()=>{
           </h2>
         
        </header>
-        <main className="container mx-auto p-4">
-        {searchResults?.data?.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {searchResults?.data?.map((transaction) => (
-              <div 
-                key={transaction.id} 
-                className="bg-white rounded-lg shadow-md p-6 border-l-4 border-blue-500 transition-transform transform hover:scale-105"
-              >
-                <div className="font-bold text-lg text-gray-800">
-                  Transaction ID: <span className="font-normal">{transaction.ID}</span>
-                </div>
-                <div className="text-sm text-gray-600 mt-2">
-                  Sender: <span className="font-medium">{transaction.Sender}</span>
-                </div>
-                <div className="text-sm text-gray-600">
-                  Receiver: <span className="font-medium">{transaction.Receiver}</span>
-                </div>
-                <div className="text-sm text-gray-600">
-                  Amount: <span className="font-medium text-blue-500">{transaction.Amount}</span>
-                </div>
-                <div className="text-sm text-gray-600">
-                  Currency: <span className="font-medium text-blue-500">{transaction.Currency}</span>
-                </div>
-              </div>
-            ))}
-          </div>
+         <main className="container mx-auto p-4">
+         {searchDetails.length > 0  ? (
+          <TransactionSearch transaction={searchDetails} />
         ) : (
           <div className="text-center text-gray-500 mt-12 font-Roboto">
             <p className="text-xl">Start typing to search for transactions.</p>
             <p className="text-sm mt-2">
-              <span className="font-semibold">Note:</span> Search by name, transaction ID, or sender.
+              <span className="font-semibold">Note:</span> Click on a search result to view details.
             </p>
           </div>
         )}
-      </main>
+        
+      </main> 
   </div>
 }
 export default App
