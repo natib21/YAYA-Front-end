@@ -35,10 +35,14 @@ const TransactionSearch = ({ transaction, handleDeleteRMV }) => {
                   Status: <span className="font-medium">{transaction.Status}</span>
                 </div>
                </div>
-               <div className="absolute top-2 right-2 text-gray-400 hover:text-gray-600 cursor-pointer p-5"
-                onClick={handleDeleteRMV}>
-                  <span>X</span>
-               </div>
+               <div
+  className="absolute top-3 right-3 flex items-center justify-center w-8 h-8 rounded-full 
+             text-gray-500 hover:text-white hover:bg-red-500 cursor-pointer transition-all duration-200"
+  onClick={handleDeleteRMV}
+>
+  <span className="text-lg font-bold">×</span>
+</div>
+
 
               </div>
             ))}

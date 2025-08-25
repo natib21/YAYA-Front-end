@@ -1,12 +1,49 @@
 import React, { useState, useEffect } from 'react';
 
 const TransactionTable = () => {
-  
+  const currentUserId = 'User Account'; 
   const [data, setData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const getTransactionType = (transaction) => {
+    // Top-up transaction: sender and recipient are the same user.
+    if (transaction.Sender === transaction.Receiver && transaction.Sender === currentUserId) {
+      return {
+        type: 'Top-Up',
+        label: 'Top-Up',
+        style: 'bg-blue-100 text-blue-600',
+        icon: '&#x2b06;', // Upwards arrow
+      };
+    }
+    // Outgoing transaction: sender is the current user.
+    if (transaction.Sender === currentUserId) {
+      return {
+        type: 'Outgoing',
+        label: 'Outgoing',
+        style: 'bg-red-100 text-red-600',
+        icon: '&#x2b06;', // Upwards arrow
+      };
+    }
+    // Incoming transaction: recipient is the current user.
+    if (transaction.Receiver === currentUserId) {
+      return {
+        type: 'Incoming',
+        label: 'Incoming',
+        style: 'bg-green-100 text-green-600',
+        icon: '&#x2b07;', // Downwards arrow
+      };
+    }
+    // If the transaction doesn't involve the current user, it's neutral.
+    return {
+      type: 'Neutral',
+      label: 'Other',
+      style: 'bg-gray-100 text-gray-600',
+      icon: '',
+    };
+  };
+  
   useEffect(() => {
     const fetchTableData = async () => {
       setIsLoading(true);
@@ -72,8 +109,11 @@ const TransactionTable = () => {
         </tr>
       );
     }
-    return data.transactions.map((item) => (
+    return data.transactions.map((item) => {
+     const type = getTransactionType(item);
+       return ( 
       <tr key={item.ID}>
+      
         <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
           {item.ID}
         </td>
@@ -83,20 +123,26 @@ const TransactionTable = () => {
         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
           {item.Receiver}
         </td>
-        <td className="px-6 py-4 whitespace-nowrap text-sm text-blue-600 font-semibold">
+        <td className="px-6 py-4 whitespace-nowrap text-sm  font-semibold">
           {item.Cause}
         </td>
         <td className="px-6 py-4 whitespace-nowrap text-sm text-blue-600 font-semibold">
           {item.Amount}
         </td>
-         <td className="px-6 py-4 whitespace-nowrap text-sm text-blue-600 font-semibold">
+         <td className="px-6 py-4 whitespace-nowrap text-sm  font-semibold">
           {item.Currency}
         </td>
         
-       
+        <td className="px-6 py-4 whitespace-nowrap">
+            <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${type.style}`}>
+              <span className="mr-1" dangerouslySetInnerHTML={{ __html: type.icon }}></span>
+              {type.label}
+            </span>
+          </td>
         
       </tr>
-    ));
+       )
+  });
   };
 
   return (
@@ -122,6 +168,9 @@ const TransactionTable = () => {
               </th>
               <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Currency
+              </th>
+               <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Type
               </th>
             </tr>
           </thead>
