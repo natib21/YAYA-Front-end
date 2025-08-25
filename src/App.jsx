@@ -1,5 +1,6 @@
 import Search from "./features/Search"
 import { useState ,useCallback} from "react";
+import TransactionTable from "./pages/TransactionTable";
 import TransactionSearch from "./pages/TransactionSearch";
 const App = ()=>{
   const [searchResults, setSearchResults] = useState([]);
@@ -10,8 +11,11 @@ const App = ()=>{
 
    const handleDetailClick = useCallback((transaction) => {
     setSearchDetails([transaction]);
-    setSearchResults([]); // Hide the dropdown after a result is clicked
+    setSearchResults([]); 
   }, []);
+  const handleDeleteRMV =()=>{
+    setSearchDetails([]);
+   }
  console.log(searchResults.data)
   return <div className="text-3xl font-bold bg-[#f8f8f8] ">
        <header className="bg-white text-center p-4 shadow-sm flex items-center justify-between gap-4 px-12 font-gills ">
@@ -42,7 +46,7 @@ const App = ()=>{
        </header>
          <main className="container mx-auto p-4">
          {searchDetails.length > 0  ? (
-          <TransactionSearch transaction={searchDetails} />
+          <TransactionSearch transaction={searchDetails} handleDeleteRMV={handleDeleteRMV} />
         ) : (
           <div className="text-center text-gray-500 mt-12 font-Roboto">
             <p className="text-xl">Start typing to search for transactions.</p>
@@ -51,7 +55,8 @@ const App = ()=>{
             </p>
           </div>
         )}
-        
+
+        <TransactionTable />
       </main> 
   </div>
 }
